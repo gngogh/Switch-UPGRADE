@@ -1,5 +1,5 @@
 #main.yml part of install role
-- name: upload IOS-XE image if enough free space
+- name: upload IOS-XE image
   ios_command:
     commands:
       - command: "copy ftp://test:123456@1.1.1.1/{{ image_new }} flash:"
