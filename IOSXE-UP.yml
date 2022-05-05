@@ -1,0 +1,31 @@
+---
+- hosts: switch
+  gather_facts: no
+  vars:
+    size: 480018.036
+    image_new: cat3k_caa-universalk9.16.12.05b.SPA.bin
+    #ftp server is hardcoded in the install/tasks/main.yml
+
+  tasks:
+    - name: get filesystems info
+      cisco.ios.ios_facts:
+        gather_subset:
+          - hardware
+
+    - name: stop playbook on current host if device is not IOS-XE
+      meta: end_host
+      when:
+        - ansible_net_iostype != 'IOS-XE'
+
+    - name: converts from bundle to install
+      include_role:
+        name: bundle
+      when:
+        - ansible_net_image != 'flash:packages.conf'
+        - ansible_net_iostype == 'IOS-XE'
+
+    - name: upgrade install mode
+      include_role:
+        name: install
+      when:
+        - ansible_net_filesystems_info['flash:']['spacefree_kb'] > size
