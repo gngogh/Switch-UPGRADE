@@ -2,7 +2,7 @@
 - name: upload IOS-XE image if enough free space
   ios_command:
     commands:
-      - command: "copy ftp://test:123456@172.18.10.90/{{ image_new }} flash:"
+      - command: "copy ftp://test:123456@1.1.1.1/{{ image_new }} flash:"
         prompt: '[confirm]'
         answer: ''
 
