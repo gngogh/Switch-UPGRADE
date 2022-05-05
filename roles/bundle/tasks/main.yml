@@ -1,0 +1,24 @@
+# main.yml part of bundle role
+- name: configure new boot var
+  ios_config:
+    commands:
+      - no boot system
+      - boot system switch all flash:packages.conf
+      - do wr
+
+- name: convert bundle to install
+  ios_command:
+    commands:
+      - command: "request platform software package expand switch all file {{ ansible_net_image }} to flash:"
+
+- name: reload switch
+  ios_command:
+    commands:
+      - command: 'reload'
+        prompt: '[confirm]'
+        answer: ''
+
+- name: wait for device to come up
+  wait_for_connection:
+    delay: 30
+
